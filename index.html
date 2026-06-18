@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <main class="main">
+        <div class="url-input-shell">
+          <input
+            id="url-input"
+            type="text"
+            placeholder="Paste your URL or text here..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="URL or text to encode"
+          />
+        </div>
+
+        <section class="preview-panel" role="img" aria-label="Tiny QR preview">
+          <div class="qr-wrap">
+            <div class="empty-state" id="empty-state" aria-hidden="true">
+              <div class="empty-state-animation" id="empty-state-animation" aria-hidden="true"></div>
+              <p>Enter a URL or text to generate</p>
+            </div>
+
+            <canvas id="qr-canvas" aria-label="Tiny QR preview"></canvas>
+            <img id="qr-logo-overlay" class="qr-logo-overlay" aria-hidden="true" alt="" />
+          </div>
+        </section>
+
+        <section class="customize" id="customize">
+          <div class="customize-grip" id="customize-grip" role="separator" aria-orientation="horizontal" tabindex="0" aria-label="Resize customize panel">
+            <span class="grip-bar"></span>
+            <span class="grip-hint">Resize</span>
+          </div>
+          <div class="customize-header" id="customize-toggle" role="button" tabindex="0" aria-expanded="false">
+            <span class="customize-title">Customize</span>
+            <span class="chevron" aria-hidden="true">
+              <svg class="chev chev-right" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <svg class="chev chev-down" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+
+          <div class="customize-body" id="customize-body" hidden>
+            <div class="ctrl-row">
+              <label class="ctrl-label">Design</label>
+              <div class="ctrl-select-shell">
+                <select id="design-select" class="ctrl-select" aria-label="Saved designs">
+                  <option value="">Custom (unsaved)</option>
+                </select>
+              </div>
+              <div class="mini-btn" id="reset-btn" role="button" tabindex="0" title="Reset to defaults">Reset</div>
+            </div>
+
+            <div class="ctrl-row">
+              <label class="ctrl-label">Preset Name</label>
+              <div class="ctrl-input-shell ctrl-grow">
+                <input id="design-name" class="ctrl-input design-name" type="text" placeholder="Enter a preset name" spellcheck="false" />
+              </div>
+              <div class="mini-btn" id="design-save" role="button" tabindex="0">Save</div>
+              <div class="mini-btn" id="design-delete" role="button" tabindex="0">Delete</div>
+            </div>
+
+            <div class="ctrl-divider"></div>
+
+            <div class="ctrl-row">
+              <label class="ctrl-label">Style</label>
+              <div class="seg" id="dot-style">
+                <div class="seg-btn is-active" data-style="square" role="button" tabindex="0">Square</div>
+                <div class="seg-btn" data-style="rounded" role="button" tabindex="0">Rounded</div>
+                <div class="seg-btn" data-style="smooth" role="button" tabindex="0">Smooth</div>
+              </div>
+            </div>
+
+            <div class="ctrl-divider"></div>
+
+            <div class="ctrl-row">
+              <label class="ctrl-label">Color</label>
+              <div class="color-chip" id="fg-chip" role="button" tabindex="0" aria-label="Choose foreground color">
+                <span class="color-chip-dot" id="fg-chip-dot"></span>
+                <span class="color-chip-hex" id="fg-chip-hex">#000000</span>
+              </div>
+            </div>
+            <div class="ctrl-row">
+              <label class="ctrl-label">Background</label>
+              <div class="color-chip" id="bg-chip" role="button" tabindex="0" aria-label="Choose background color">
+                <span class="color-chip-dot" id="bg-chip-dot"></span>
+                <span class="color-chip-hex" id="bg-chip-hex">#ffffff</span>
+              </div>
+            </div>
+            <div class="ctrl-row">
+              <label class="ctrl-label">Transparent</label>
+              <div class="toggle" id="bg-transparent" role="checkbox" aria-checked="false" tabindex="0"></div>
+            </div>
+
+            <div class="ctrl-divider"></div>
+
+            <div class="ctrl-row">
+              <label class="ctrl-label">Padding</label>
+              <div class="slider" id="pad-slider" role="slider" tabindex="0" aria-label="Padding">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="pad-fill"></div>
+                <div class="slider-thumb" id="pad-thumb"></div>
+              </div>
+              <span class="step-val" id="pad-val">4</span>
+            </div>
+            <div class="ctrl-row">
+              <label class="ctrl-label">BG Roundness</label>
+              <div class="slider" id="bgr-slider" role="slider" tabindex="0" aria-label="Background corner radius">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="bgr-fill"></div>
+                <div class="slider-thumb" id="bgr-thumb"></div>
+              </div>
+              <span class="step-val" id="bgr-val">0%</span>
+            </div>
+            <div class="ctrl-row">
+              <label class="ctrl-label">Corners Roundness</label>
+              <div class="slider" id="fdr-slider" role="slider" tabindex="0" aria-label="QR finder corner radius">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="fdr-fill"></div>
+                <div class="slider-thumb" id="fdr-thumb"></div>
+              </div>
+              <span class="step-val" id="fdr-val">0%</span>
+            </div>
+
+            <div class="ctrl-divider"></div>
+
+            <div class="ctrl-row">
+              <label class="ctrl-label">Logo</label>
+              <div class="mini-btn" id="logo-upload" role="button" tabindex="0">Upload PNG</div>
+              <div class="mini-btn" id="logo-remove" role="button" tabindex="0">Remove</div>
+              <img id="logo-thumb" class="logo-thumb" alt="" />
+            </div>
+            <div class="ctrl-row" id="logo-size-row" hidden>
+              <label class="ctrl-label">Logo size</label>
+              <div class="slider" id="logo-slider" role="slider" tabindex="0" aria-label="Logo size">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="logo-fill"></div>
+                <div class="slider-thumb" id="logo-thumb-handle"></div>
+              </div>
+              <span class="step-val" id="logo-val">20%</span>
+            </div>
+            <div class="ctrl-row" id="logo-radius-row" hidden>
+              <label class="ctrl-label">Logo Roundness</label>
+              <div class="slider" id="lgr-slider" role="slider" tabindex="0" aria-label="Logo corner radius">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="lgr-fill"></div>
+                <div class="slider-thumb" id="lgr-thumb"></div>
+              </div>
+              <span class="step-val" id="lgr-val">25%</span>
+            </div>
+            <div class="ctrl-row" id="logo-pad-row" hidden>
+              <label class="ctrl-label">Mask padding</label>
+              <div class="slider" id="lpad-slider" role="slider" tabindex="0" aria-label="Logo mask padding">
+                <div class="slider-track"></div>
+                <div class="slider-fill" id="lpad-fill"></div>
+                <div class="slider-thumb" id="lpad-thumb"></div>
+              </div>
+              <span class="step-val" id="lpad-val">100%</span>
+            </div>
+
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-anim" id="footer-anim" aria-hidden="true"></div>
+        <div class="footer-actions">
+          <div class="icon-btn" id="settings-btn" role="button" tabindex="0" aria-label="Settings">
+            <svg width="18" height="18" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill="currentColor" d="M259.1 73.5C262.1 58.7 275.2 48 290.4 48L350.2 48C365.4 48 378.5 58.7 381.5 73.5L396 143.5C410.1 149.5 423.3 157.2 435.3 166.3L503.1 143.8C517.5 139 533.3 145 540.9 158.2L570.8 210C578.4 223.2 575.7 239.8 564.3 249.9L511 297.3C511.9 304.7 512.3 312.3 512.3 320C512.3 327.7 511.8 335.3 511 342.7L564.4 390.2C575.8 400.3 578.4 417 570.9 430.1L541 481.9C533.4 495 517.6 501.1 503.2 496.3L435.4 473.8C423.3 482.9 410.1 490.5 396.1 496.6L381.7 566.5C378.6 581.4 365.5 592 350.4 592L290.6 592C275.4 592 262.3 581.3 259.3 566.5L244.9 496.6C230.8 490.6 217.7 482.9 205.6 473.8L137.5 496.3C123.1 501.1 107.3 495.1 99.7 481.9L69.8 430.1C62.2 416.9 64.9 400.3 76.3 390.2L129.7 342.7C128.8 335.3 128.4 327.7 128.4 320C128.4 312.3 128.9 304.7 129.7 297.3L76.3 249.8C64.9 239.7 62.3 223 69.8 209.9L99.7 158.1C107.3 144.9 123.1 138.9 137.5 143.7L205.3 166.2C217.4 157.1 230.6 149.5 244.6 143.4L259.1 73.5zM320.3 400C364.5 399.8 400.2 363.9 400 319.7C399.8 275.5 363.9 239.8 319.7 240C275.5 240.2 239.8 276.1 240 320.3C240.2 364.5 276.1 400.2 320.3 400z"/>
+            </svg>
+          </div>
+          <div class="action-btn is-disabled" id="import-btn" role="button" tabindex="-1" aria-disabled="true">Import into Sequence</div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-overlay" id="settings-modal" hidden>
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">Settings</span>
+          <div class="modal-close" id="settings-close" role="button" tabindex="0" aria-label="Close">×</div>
+        </div>
+        <div class="modal-body">
+          <div class="ctrl-row ctrl-row-stack">
+            <label class="ctrl-label wide">Render folder</label>
+          </div>
+          <div class="ctrl-row">
+            <div class="ctrl-input-shell ctrl-grow">
+              <input id="render-dir" class="ctrl-input" type="text" readonly placeholder="Next to project (Tiny QRs)" />
+            </div>
+            <div class="mini-btn" id="render-dir-pick" role="button" tabindex="0">Choose…</div>
+            <div class="mini-btn" id="render-dir-clear" role="button" tabindex="0">Default</div>
+          </div>
+
+          <div class="ctrl-divider"></div>
+
+          <div class="ctrl-row ctrl-row-stack">
+            <label class="ctrl-label wide">Bin &amp; folder name</label>
+          </div>
+          <div class="ctrl-row">
+            <div class="ctrl-input-shell ctrl-grow">
+              <input id="bin-name" class="ctrl-input" type="text" value="Tiny QRs" placeholder="Tiny QRs" spellcheck="false" aria-label="Project bin and output folder name" />
+            </div>
+          </div>
+
+          <div class="ctrl-divider"></div>
+
+          <div class="ctrl-row ctrl-row-stack">
+            <label class="ctrl-label wide">File format</label>
+          </div>
+          <div class="ctrl-row">
+            <div class="ctrl-select-shell">
+              <select id="format-select" class="ctrl-select">
+                <option value="png">PNG (lossless, transparency)</option>
+                <option value="bmp">BMP (lossless)</option>
+                <option value="gif">GIF (lossless, transparency)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="color-modal" hidden>
+      <div class="modal modal-color">
+        <div class="modal-body">
+          <div class="picker">
+            <div class="sv-wrap">
+              <canvas id="sv-canvas" class="sv-canvas" width="210" height="140"></canvas>
+              <div class="sv-marker" id="sv-marker"></div>
+            </div>
+            <div class="hue-wrap">
+              <canvas id="hue-canvas" class="hue-canvas" width="210" height="14"></canvas>
+              <div class="hue-marker" id="hue-marker"></div>
+            </div>
+            <div class="picker-foot">
+              <span class="color-preview" id="color-preview"></span>
+              <div class="ctrl-input-shell hex">
+                <input id="color-hex" class="ctrl-input" type="text" maxlength="7" spellcheck="false" />
+              </div>
+              <button type="button" class="spectrum-btn spectrum-btn-sm" id="color-done">Done</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="folder-setup-modal" hidden>
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">Choose QR save location</span>
+        </div>
+        <div class="modal-body">
+          <p class="about-text">
+            Tiny QR needs a folder to save QR images into. Preferably, choose the
+            root folder of your current project and the images will be saved in a
+            subfolder. This choice is saved on a per-project basis :)
+          </p>
+          <div class="ctrl-row">
+            <div class="mini-btn" id="folder-setup-pick" role="button" tabindex="0">Choose folder…</div>
+            <div class="mini-btn" id="folder-setup-cancel" role="button" tabindex="0">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="popup-test-modal" hidden>
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">Popup testing</span>
+          <div class="modal-close" id="popup-test-close" role="button" tabindex="0" aria-label="Close">×</div>
+        </div>
+        <div class="modal-body">
+          <p class="about-text">
+            Dev tool: trigger each popup/modal/toast to preview it. Modals open on
+            top; close them to return here, or press Enter in the text field to
+            reopen this panel.
+          </p>
+          <div class="ctrl-row">
+            <div class="mini-btn" id="test-folder-setup" role="button" tabindex="0">Folder setup popup</div>
+            <div class="mini-btn" id="test-settings" role="button" tabindex="0">Settings modal</div>
+          </div>
+          <div class="ctrl-row">
+            <div class="mini-btn" id="test-color" role="button" tabindex="0">Color picker</div>
+            <div class="mini-btn" id="test-update" role="button" tabindex="0">Update toast</div>
+          </div>
+          <div class="ctrl-row">
+            <div class="mini-btn" id="test-toast-success" role="button" tabindex="0">Success toast</div>
+            <div class="mini-btn" id="test-toast-error" role="button" tabindex="0">Error toast</div>
+            <div class="mini-btn" id="test-toast-info" role="button" tabindex="0">Info toast</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="plugin-body" aria-live="polite"></div>
+  </body>
+</html>

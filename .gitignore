@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Dependencies (qrcode + lottie are vendored under vendor/)
+node_modules/
+
+# Editor / OS cruft
+*.log
+Thumbs.db

@@ -1,0 +1,22 @@
+{
+  "name": "tiny-qr-pr",
+  "version": "1.0.0",
+  "description": "Tiny QR for Premiere Pro: a UXP panel that generates branded QR codes and places them on the timeline.",
+  "author": "crinzip",
+  "license": "MIT",
+  "homepage": "https://github.com/crinzip/tiny-qr-pr#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crinzip/tiny-qr-pr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/crinzip/tiny-qr-pr/issues"
+  },
+  "keywords": [
+    "premiere-pro",
+    "uxp",
+    "qr-code",
+    "qrcode",
+    "extension"
+  ]
+}
